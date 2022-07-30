@@ -19,7 +19,7 @@ async fn main() -> std::io::Result<()> {
                 .service(web::resource("/readings/add").route(web::post().to(add_reading))),
         )
     })
-    .bind("127.0.0.1:8080")?
+    .bind("127.0.0.1:4000")?
     .run()
     .await
 }
@@ -31,17 +31,17 @@ async fn add_reading(reading: web::Json<models::Reading>) -> Result<String> {
         .expect(&format!("Error connecting to {}", database_url));
 
     let new_reading = models::Reading {
-        id: reading.id,
         temperature: reading.temperature,
         humidity: reading.humidity,
         dust_concentration: reading.dust_concentration,
         pressure: reading.pressure,
-        air_purity: reading.air_purity.clone(),
+        air_purity: reading.air_purity.to_owned(),
     };
 
     diesel::insert_into(schema::readings::table)
         .values(&new_reading)
-        .execute(&connection);
+        .execute(&connection)
+        .unwrap();
 
     Ok("Created reading".to_owned())
 }
