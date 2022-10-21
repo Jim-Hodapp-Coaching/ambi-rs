@@ -27,7 +27,7 @@ async fn main() -> std::io::Result<()> {
 async fn add_reading(reading: web::Json<models::Reading>) -> Result<String> {
     dotenv().ok();
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let connection = PgConnection::establish(&database_url)
+    let mut connection = PgConnection::establish(&database_url)
         .expect(&format!("Error connecting to {}", database_url));
 
     let new_reading = models::Reading {
@@ -40,7 +40,7 @@ async fn add_reading(reading: web::Json<models::Reading>) -> Result<String> {
 
     diesel::insert_into(schema::readings::table)
         .values(&new_reading)
-        .execute(&connection)
+        .execute(&mut connection)
         .unwrap();
 
     Ok("Created reading".to_owned())
