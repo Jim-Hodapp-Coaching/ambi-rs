@@ -3,7 +3,7 @@ use diesel::Insertable;
 use serde::Deserialize;
 
 #[derive(Debug, Insertable, Deserialize)]
-#[table_name = "readings"]
+#[diesel(table_name = readings)]
 pub struct Reading {
     pub temperature: Option<f64>,
     pub humidity: Option<f64>,
