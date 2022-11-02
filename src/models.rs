@@ -1,9 +1,9 @@
-use crate::schema::readings;
-use diesel::Insertable;
 use serde::Deserialize;
+use diesel::Insertable;
+use crate::schema::readings;
 
 #[derive(Debug, Insertable, Deserialize)]
-#[diesel(table_name = readings)]
+#[table_name = "readings"]
 pub struct Reading {
     pub temperature: Option<f64>,
     pub humidity: Option<f64>,

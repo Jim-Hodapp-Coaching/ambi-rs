@@ -1,3 +1,5 @@
+// @generated automatically by Diesel CLI.
+
 table! {
     readings (id) {
         id -> Int4,

@@ -4,8 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-actix-web = "4"
-diesel = { version = "2.0.0", features = ["postgres"] }
-dotenv = "0.15.0"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1"
+rocket = { version = "0.5.0-rc.2", features = ["json"] }
+serde = "1.0.147"
+diesel = { version = "1.4.8", features = ["postgres"] }
+
+[dependencies.rocket_sync_db_pools]
+version = "0.1.0-rc.2"
+features = ["diesel_postgres_pool"]
