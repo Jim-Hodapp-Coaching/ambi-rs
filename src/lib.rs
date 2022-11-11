@@ -1,5 +1,4 @@
-mod routes;
-pub mod db;
+mod controller;
 pub mod models;
 pub mod schema;
 
@@ -10,7 +9,7 @@ extern crate diesel;
 
 use rocket::Build;
 use rocket_sync_db_pools::database;
-use crate::routes::create_reading;
+use crate::controller::create_reading;
 
 #[database("ambi_rs_dev")]
 pub struct PgConnection(diesel::PgConnection);
@@ -19,5 +18,5 @@ pub struct PgConnection(diesel::PgConnection);
 pub fn rocket_builder() -> rocket::Rocket<Build> {
     rocket::build()
     .attach(PgConnection::fairing())
-    .mount("/", routes![create_reading])
+    .mount("/api", routes![create_reading])
 }
