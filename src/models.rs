@@ -6,7 +6,7 @@ use crate::schema::readings;
 #[serde(crate = "rocket::serde")]
 pub struct Reading {
     pub id: i32,
-    pub temperature: Option<f64>,
+    pub temperature: f64,
     pub humidity: Option<f64>,
     pub dust_concentration: Option<f64>,
     pub pressure: Option<i32>,
@@ -17,7 +17,7 @@ pub struct Reading {
 #[serde(crate = "rocket::serde")]
 #[table_name = "readings"]
 pub struct NewReading {
-    pub temperature: Option<f64>,
+    pub temperature: f64,
     pub humidity: Option<f64>,
     pub dust_concentration: Option<f64>,
     pub pressure: Option<i32>,
