@@ -1,9 +1,9 @@
-let temperatureDiv = document.getElementById('temperature');
-let humidityDiv = document.getElementById('humidity');
-let pressureDiv = document.getElementById('pressure');
-let dustConcentrationDiv = document.getElementById('dust_concentration');
-let airPurityDiv = document.getElementById('air_purity');
-let statusDiv = document.getElementById('status');
+let temperatureTd = document.getElementById('temperature');
+let humidityTd = document.getElementById('humidity');
+let pressureTd = document.getElementById('pressure');
+let dustConcentrationTd = document.getElementById('dust_concentration');
+let airPurityTd = document.getElementById('air_purity');
+let statusTd = document.getElementById('status');
 
 var STATE = {
     connected: false,
@@ -22,11 +22,11 @@ function subscribe(uri) {
         const msg = JSON.parse(ev.data);
         if (!"temperature" in msg && !"humidity" in msg && !"pressure" in msg
             && !"dust_concentration" in msg && !"air_purity" in msg) return;
-        temperatureDiv.innerText = msg.temperature + ' °C';
-        humidityDiv.innerText = msg.humidity + ' %';
-        pressureDiv.innerText = msg.pressure + ' mbars';
-        dustConcentrationDiv.innerText = msg.dust_concentration + ' pcs/ltr';
-        airPurityDiv.innerText = msg.air_purity;
+        temperatureTd.innerText = msg.temperature + ' °C';
+        humidityTd.innerText = msg.humidity + ' %';
+        pressureTd.innerText = msg.pressure + ' mbars';
+        dustConcentrationTd.innerText = msg.dust_concentration + ' pcs/ltr';
+        airPurityTd.innerText = msg.air_purity;
       });
   
       events.addEventListener("open", () => {
@@ -52,7 +52,7 @@ function subscribe(uri) {
 // Set the connection status: `true` for connected, `false` for disconnected.
 function setConnectedStatus(status) {
     STATE.connected = status;
-    statusDiv.className = (status) ? "connected" : "reconnecting";
+    statusTd.innerText = (status) ? "connected" : "reconnecting";
   }
 
 function init() {
