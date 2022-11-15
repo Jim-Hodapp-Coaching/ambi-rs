@@ -2,15 +2,15 @@ use serde::{ Serialize, Deserialize};
 use diesel::Insertable;
 use crate::schema::readings;
 
-#[derive(Debug, Deserialize, Serialize, Queryable)]
+#[derive(Debug, Clone, Deserialize, Serialize, Queryable)]
 #[serde(crate = "rocket::serde")]
 pub struct Reading {
     pub id: i32,
     pub temperature: f64,
-    pub humidity: Option<f64>,
-    pub dust_concentration: Option<f64>,
-    pub pressure: Option<i32>,
-    pub air_purity: Option<String>,
+    pub humidity: f64,
+    pub dust_concentration: f64,
+    pub pressure: i32,
+    pub air_purity: String,
 }
 
 #[derive(Debug, Insertable, Deserialize)]
@@ -18,10 +18,10 @@ pub struct Reading {
 #[table_name = "readings"]
 pub struct NewReading {
     pub temperature: f64,
-    pub humidity: Option<f64>,
-    pub dust_concentration: Option<f64>,
-    pub pressure: Option<i32>,
-    pub air_purity: Option<String>,
+    pub humidity: f64,
+    pub dust_concentration: f64,
+    pub pressure: i32,
+    pub air_purity: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

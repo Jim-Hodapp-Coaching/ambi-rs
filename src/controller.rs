@@ -1,41 +1,30 @@
 use rocket::{State, Shutdown};
 use rocket::response::status::Created;
 use rocket::response::stream::{EventStream, Event};
-use rocket::serde::{json::Json, Serialize, Deserialize};
-use rocket::tokio::sync::broadcast::{channel, Sender, error::RecvError};
+use rocket::serde::json::Json;
+use rocket::tokio::sync::broadcast::Sender;
 use rocket::tokio::time::{self, Duration};
-use rocket::tokio::select;
 
-use diesel::result::Error;
-
-use crate::models::{Reading, NewReading, ApiError};
 use crate::schema::*;
-//use crate::schema;
 use crate::PgConnection;
 use diesel::prelude::*;
 
-#[derive(Debug, Clone, FromForm, Serialize, Deserialize)]
-#[cfg_attr(test, derive(PartialEq, UriDisplayQuery))]
-#[serde(crate = "rocket::serde")]
-pub(crate) struct Message {
-    pub temperature: f64,
-}
+use crate::models::{Reading, NewReading, ApiError};
 
 /// Returns an infinite stream of server-sent events. Each event is a message
 /// pulled from a broadcast queue sent by the `post` handler.
 #[get("/events")]
-pub(crate) async fn events(conn: PgConnection, queue: &State<Sender<Message>>, mut end: Shutdown) -> EventStream![] {
-    let mut rx = queue.subscribe();
+pub(crate) async fn events(conn: PgConnection, queue: &State<Sender<Reading>>, mut _end: Shutdown) -> EventStream![] {
+    let _rx = queue.subscribe();
     std::println!("events()");
     EventStream! {
         let mut interval = time::interval(Duration::from_secs(5));
         loop {
-            match get_latest_temperature(&conn).await {
-                Ok(t) => {
-                    let msg = Message { temperature: t};
-                    yield Event::json(&msg);
+            match get_latest_reading(&conn).await {
+                Ok(reading) => {
+                    yield Event::json(&reading);
                 }
-                Err(e) => { println!("Err: failed to retrieve latest temperature") }
+                Err(e) => { println!("Err: failed to retrieve latest reading: {:?}", e) }
             }
 
             interval.tick().await;
@@ -54,26 +43,23 @@ pub(crate) async fn events(conn: PgConnection, queue: &State<Sender<Message>>, m
     }
 }
 
-/// Receive a message from a form submission and broadcast it to any receivers.
-// #[post("/temperature", data = "<form>")]
-// pub(crate) fn get_temp(form: Form<Message>, queue: &State<Sender<Message>>) {
-//     // A send 'fails' if there are no active subscribers. That's okay.
-//     let _res = queue.send(form.into_inner());
-// }
-
-async fn get_latest_temperature(conn: &PgConnection) -> Result<f64, Error> {
-    //use self::readings::dsl::*;
-
+async fn get_latest_reading(conn: &PgConnection) -> Result<Reading, Json<ApiError>> {
     // Get the last inserted temperature value
-    let temperature = conn.run(move |c| {
+    let reading = conn.run(move |c| {
         readings::table
-            .select((readings::id, readings::temperature))
-            //.filter(readings::id.eq(id.ok().unwrap()))
             .order(readings::id.desc())
-            .first::<(i32, f64)>(c)
-    }).await;
+            .first::<Reading>(c)
+    }).await
+    .map(|a| a)
+    .map_err(|e| {
+        Json(ApiError {
+            details: e.to_string(),
+        })
+    });
 
-    Ok(temperature.ok().unwrap().1)
+    println!("Reading: {:?}", reading);
+
+    reading
 }
 
 #[post("/readings/add", data="<reading>")]

@@ -1,5 +1,4 @@
 use ambi_rs::rocket_builder;
-use diesel::prelude::*;
 
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error>{

@@ -1,4 +1,8 @@
 let temperatureDiv = document.getElementById('temperature');
+let humidityDiv = document.getElementById('humidity');
+let pressureDiv = document.getElementById('pressure');
+let dustConcentrationDiv = document.getElementById('dust_concentration');
+let airPurityDiv = document.getElementById('air_purity');
 let statusDiv = document.getElementById('status');
 
 var STATE = {
@@ -16,9 +20,13 @@ function subscribe(uri) {
         console.log("raw data", JSON.stringify(ev.data));
         console.log("decoded data", JSON.stringify(JSON.parse(ev.data)));
         const msg = JSON.parse(ev.data);
-        if (!"temperature" in msg) return;
-        temperatureDiv.innerText = msg.temperature;
-        // addMessage(msg.room, msg.username, msg.message, true);
+        if (!"temperature" in msg && !"humidity" in msg && !"pressure" in msg
+            && !"dust_concentration" in msg && !"air_purity" in msg) return;
+        temperatureDiv.innerText = msg.temperature + ' °C';
+        humidityDiv.innerText = msg.humidity + ' %';
+        pressureDiv.innerText = msg.pressure + ' mbars';
+        dustConcentrationDiv.innerText = msg.dust_concentration + ' pcs/ltr';
+        airPurityDiv.innerText = msg.air_purity;
       });
   
       events.addEventListener("open", () => {
