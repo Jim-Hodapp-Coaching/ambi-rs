@@ -1,8 +1,6 @@
 # Ambi
 
-Ambi is a Rust-based web service that presents a basic HTML5 + JavaScript frontend to display real time ambient room conditions
-like temperature, humidity, pressure, air quality, dust concentration, etc. It uses the Rocket web framework + Server Sent Events (SSE)
-to push updates to the client with no page refresh needed.
+Ambi is a Rust-based web service that presents a basic HTML5 + JavaScript frontend and an HTMX frontend to display real time ambient room conditions like temperature, humidity, pressure, air quality, dust concentration, etc. It uses the Rocket web framework + Server Sent Events (SSE) to push updates to the client with no page refresh needed.
 
 ## Setup
 
