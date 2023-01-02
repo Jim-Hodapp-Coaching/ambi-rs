@@ -2,6 +2,7 @@ use rocket::{State, Shutdown};
 use rocket::response::status::Created;
 use rocket::response::stream::{EventStream, Event};
 use rocket::serde::json::Json;
+use rocket::tokio::select;
 use rocket::tokio::sync::broadcast::Sender;
 use rocket::tokio::time::{self, Duration};
 
@@ -14,20 +15,34 @@ use crate::models::{Reading, NewReading, ApiError};
 /// Returns an infinite stream of server-sent events. Each event is a message
 /// pulled from a broadcast queue sent by the `post` handler.
 #[get("/events")]
-pub(crate) async fn events(conn: PgConnection, queue: &State<Sender<Reading>>, mut _end: Shutdown) -> EventStream![] {
+pub(crate) async fn events(conn: PgConnection, queue: &State<Sender<Reading>>, mut end: Shutdown) -> EventStream![] {
     let _rx = queue.subscribe();
     std::println!("events()");
     EventStream! {
         let mut interval = time::interval(Duration::from_secs(5));
         loop {
-            match get_latest_reading(&conn).await {
-                Ok(reading) => {
-                    yield Event::json(&reading);
-                }
-                Err(e) => { println!("Err: failed to retrieve latest reading: {:?}", e) }
-            }
+            //interval.tick().await;
 
-            interval.tick().await;
+            // Handle graceful shutdown of infinite EventStream
+            select! {
+                _ = interval.tick() => {
+                    match get_latest_reading(&conn).await {
+                        Ok(reading) => {
+                            yield Event::json(&reading);
+                            yield Event::data(format!("{}°C", reading.temperature)).event("temperature");
+                            yield Event::data(format!("{}%", reading.humidity)).event("humidity");
+                            yield Event::data(format!("{} mbars", reading.pressure)).event("pressure");
+                            yield Event::data(format!("{}", reading.air_purity)).event("air_purity");
+                            yield Event::data(format!("{} pcs/ltr", reading.dust_concentration)).event("dust_concentration");
+                        }
+                        Err(e) => { println!("Err: failed to retrieve latest reading: {:?}", e) }
+                    }
+                }
+                _ = &mut end => {
+                    println!("EventStream graceful shutdown requested, handling...");
+                    break;
+                }
+            }
             // let msg = select! {
             //     msg = rx.recv() => match msg {
             //         Ok(msg) => msg,
