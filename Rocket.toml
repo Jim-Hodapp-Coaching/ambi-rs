@@ -1,0 +1,2 @@
+[default.databases.ambi_rs_dev]
+url = "postgres://postgres:postgres@localhost/ambi_rs_dev"

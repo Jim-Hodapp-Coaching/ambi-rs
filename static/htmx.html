@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Ambi HTMX</title>
+    <script src="https://unpkg.com/htmx.org@1.8.4"></script>
+    <script src="/htmx.js" charset="utf-8" defer></script>
+  </head>
+  <body hx-sse="connect:/events">
+    <table>
+        <tr>
+            <td style="font-weight: bold;">Temperature:</td>
+            <td id="temperature" hx-sse="swap:temperature">0°C</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Humidity:</td>
+            <td id="humidity" hx-sse="swap:humidity">0%</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Pressure:</td>
+            <td id="pressure" hx-sse="swap:pressure">0 mbars</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Air Purity:</td>
+            <td id="air_purity" hx-sse="swap:air_purity">Unknown</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Dust Concentration:</td>
+            <td id="dust_concentration" hx-sse="swap:dust_concentration">Unknown</td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Connected Status:</td>
+            <td id="status">not connected</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td><a href="/index.html">JS Version</a></td>
+        </tr>
+    </table>
+  </body>
+</html>
