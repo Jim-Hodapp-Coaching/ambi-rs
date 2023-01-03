@@ -1,2 +1,10 @@
+## defaults for _all_ profiles
+[default]
+address = "0.0.0.0"
+
+## set only when compiled in debug mode, i.e, `cargo build`
+[debug]
+port = 8000
+
 [default.databases.ambi_rs_dev]
 url = "postgres://postgres:postgres@localhost/ambi_rs_dev"
