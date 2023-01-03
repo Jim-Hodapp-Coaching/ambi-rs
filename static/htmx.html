@@ -14,41 +14,26 @@
           Ambient conditions
         </h1>
         <p class="subtitle">
-          Current room ambient conditions
+          Current ambient room conditions
         </p>
       </div>
     </section>
-    <section class="container">
-      <table>
-        <tr>
-            <td style="font-weight: bold;">Temperature:</td>
-            <td id="temperature" hx-sse="swap:temperature">0°C</td>
-        </tr>
-        <tr>
-            <td style="font-weight: bold;">Humidity:</td>
-            <td id="humidity" hx-sse="swap:humidity">0%</td>
-        </tr>
-        <tr>
-            <td style="font-weight: bold;">Pressure:</td>
-            <td id="pressure" hx-sse="swap:pressure">0 mbars</td>
-        </tr>
-        <tr>
-            <td style="font-weight: bold;">Air Purity:</td>
-            <td id="air_purity" hx-sse="swap:air_purity">Unknown</td>
-        </tr>
-        <tr>
-            <td style="font-weight: bold;">Dust Concentration:</td>
-            <td id="dust_concentration" hx-sse="swap:dust_concentration">Unknown</td>
-        </tr>
-        <tr>
-            <td style="font-weight: bold;">Connected Status:</td>
-            <td id="status">not connected</td>
-        </tr>
-        <tr></tr>
-        <tr>
-            <td><a href="/index.html">JS Version</a></td>
-        </tr>
-      </table>
-    </section>
+    <div class="container">
+        <div class="notification is-primary" id="temperature" hx-sse="swap:temperature" style="font-weight: bold;">
+          Temperature
+        </div>
+        <div class="notification" id="humidity" hx-sse="swap:humidity" style="font-weight: bold;">
+          Humidity
+        </div>
+        <div class="notification" id="pressure" hx-sse="swap:pressure" style="font-weight: bold;">
+          Pressure
+        </div>
+        <div class="notification" id="air_purity" hx-sse="swap:air_purity" style="font-weight: bold;">
+          Air Purity
+        </div>
+        <div class="notification" id="dust_concentration" hx-sse="swap:dust_concentration" style="font-weight: bold;">
+          Dust Concentration
+        </div>
+    </div>
   </body>
 </html>
