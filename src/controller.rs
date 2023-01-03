@@ -10,6 +10,8 @@ use crate::schema::*;
 use crate::PgConnection;
 use diesel::prelude::*;
 
+use log::{debug, error, info};
+
 use crate::models::{ApiError, NewReading, Reading};
 
 /// Returns an infinite stream of server-sent events. Each event is a message
@@ -21,7 +23,6 @@ pub(crate) async fn events(
     mut end: Shutdown,
 ) -> EventStream![] {
     let _rx = queue.subscribe();
-    std::println!("events()");
     EventStream! {
         let mut interval = time::interval(Duration::from_secs(5));
         loop {
@@ -36,13 +37,13 @@ pub(crate) async fn events(
                             yield Event::data(format!("{}", reading.air_purity)).event("air_purity");
                             yield Event::data(format!("{} pcs/ltr", reading.dust_concentration)).event("dust_concentration");
                         }
-                        Err(e) => { println!("Err: failed to retrieve latest reading: {:?}", e) }
+                        Err(e) => { error!("Err: failed to retrieve latest reading: {:?}", e) }
                     }
                 }
 
                 // Handle graceful shutdown of infinite EventStream
                 _ = &mut end => {
-                    println!("EventStream graceful shutdown requested, handling...");
+                    info!("EventStream graceful shutdown requested, handling...");
                     break;
                 }
             }
@@ -59,14 +60,13 @@ async fn get_latest_reading(conn: &PgConnection) -> Result<Reading, Json<ApiErro
                 .first::<Reading>(c)
         })
         .await
-        .map(|a| a)
         .map_err(|e| {
             Json(ApiError {
                 details: e.to_string(),
             })
         });
 
-    println!("Reading: {:?}", reading);
+    debug!("Reading: {:?}", reading);
 
     reading
 }
