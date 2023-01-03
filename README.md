@@ -2,6 +2,8 @@
 
 Ambi is a Rust-based web service that presents a basic HTML5 + JavaScript frontend and an HTMX frontend to display real time ambient room conditions like temperature, humidity, pressure, air quality, dust concentration, etc. It uses the Rocket web framework + Server Sent Events (SSE) to push updates to the client with no page refresh needed.
 
+<img width="1455" alt="Screenshot 2023-01-02 at 22 03 59" src="https://user-images.githubusercontent.com/3219120/210298784-cd1479e5-ef1b-4e81-b213-22dba83ec6bb.png">
+
 ## Setup
 
 1. First [install the DB ORM Diesel CLI](https://diesel.rs/guides/getting-started), then proceed to setting up the Postgresql DB
