@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -eo pipefail
+
+mix format
+
+# Stage changes to files that were already staged
+git update-index --again
