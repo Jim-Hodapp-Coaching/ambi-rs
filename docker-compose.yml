@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+    db:
+        environment:
+            POSTGRES_USER: "postgres"
+            POSTGRES_DB: "ambi_rs_dev"
+            POSTGRES_PASSWORD: "postgres"
+        image: postgres:latest
+        restart: on-failure
+        ports:
+            - 5432:5432
+        expose:
+            - 5432
+
+    web:
+        restart: on-failure
+        depends_on:
+            - db
+        environment: 
+            DATABASE_URL: "postgres://postgres:postgres@db:5432/ambi_rs_dev"
+        build: .
+        ports:
+            - 8000:8000
+        links:
+            - db
