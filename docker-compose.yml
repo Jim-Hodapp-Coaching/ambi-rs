@@ -10,15 +10,19 @@ services:
         restart: on-failure
         ports:
             - 5432:5432
-        expose:
-            - 5432
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
 
     web:
         restart: on-failure
         depends_on:
-            - db
+            db:
+                condition: service_healthy
         environment: 
-            DATABASE_URL: "postgres://postgres:postgres@db:5432/ambi_rs_dev"
+            DATABASE_URL: "postgres://postgres:postgres@db/ambi_rs_dev"
         build: .
         ports:
             - 8000:8000
