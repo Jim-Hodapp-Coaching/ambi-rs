@@ -22,7 +22,7 @@ services:
             db:
                 condition: service_healthy
         environment: 
-            DATABASE_URL: "postgres://postgres:postgres@db/ambi_rs_dev"
+            ROCKET_DATABASES: '{ambi_rs_dev={url="postgres://postgres:postgres@db/ambi_rs_dev"}}'
         build: .
         ports:
             - 8000:8000
