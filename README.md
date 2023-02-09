@@ -29,8 +29,10 @@ This will create symlinks to the Git hooks, preserving any hooks that you may ha
 
 To run:
 ```sh
-ROCKET_DATABASES='{db={url="postgres://username:passwd@localhost:5432/ambi_rs_dev"}}' cargo run
+ROCKET_DATABASES='{ambi_rs_dev={url="postgres://postgres:postgres@localhost/ambi_rs_dev"}}' cargo run
+```
 
-# Or with Docker
+Or with Docker:
+```sh
 docker compose up -d
 ```
