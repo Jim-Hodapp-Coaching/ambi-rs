@@ -1,0 +1,30 @@
+version: "3"
+
+services:
+    db:
+        environment:
+            POSTGRES_USER: "postgres"
+            POSTGRES_DB: "ambi_rs_dev"
+            POSTGRES_PASSWORD: "postgres"
+        image: postgres:latest
+        restart: on-failure
+        ports:
+            - 5432:5432
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+
+    web:
+        restart: on-failure
+        depends_on:
+            db:
+                condition: service_healthy
+        environment: 
+            ROCKET_DATABASES: '{ambi_rs_dev={url="postgres://postgres:postgres@db/ambi_rs_dev"}}'
+        build: .
+        ports:
+            - 8000:8000
+        links:
+            - db

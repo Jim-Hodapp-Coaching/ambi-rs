@@ -4,13 +4,13 @@ Ambi is a Rust-based web service that presents a basic HTML5 + JavaScript fronte
 
 <img width="1455" alt="Screenshot 2023-01-02 at 22 03 59" src="https://user-images.githubusercontent.com/3219120/210298784-cd1479e5-ef1b-4e81-b213-22dba83ec6bb.png">
 
-## Setup
+## Non-Container Setup
 
 1. First [install the DB ORM Diesel CLI](https://diesel.rs/guides/getting-started), then proceed to setting up the Postgresql DB
 
 Setting up the Postgresql DB:
 ```sh
-diesel setup
+DATABASE_URL=postgres://postgres:postgres@localhost/ambi_rs_dev diesel setup
 ```
 
 Now run the DB migrations to complete prepping the DB:
@@ -29,5 +29,10 @@ This will create symlinks to the Git hooks, preserving any hooks that you may ha
 
 To run:
 ```sh
-ROCKET_DATABASES='{db={url="postgres://username:passwd@localhost:5432/ambi_rs_dev"}}' cargo run
+ROCKET_DATABASES='{ambi_rs_dev={url="postgres://postgres:postgres@localhost/ambi_rs_dev"}}' cargo run
+```
+
+Or with Docker:
+```sh
+docker compose up -d
 ```
