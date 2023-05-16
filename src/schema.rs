@@ -1,5 +1,7 @@
 // @generated automatically by Diesel CLI.
 
+use diesel::prelude::*;
+
 table! {
     readings (id) {
         id -> Int4,
