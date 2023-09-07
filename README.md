@@ -15,14 +15,17 @@ DATABASE_URL=postgres://postgres:postgres@localhost/ambi_rs_dev diesel setup
 
 Now run the DB migrations to complete prepping the DB:
 ```sh
-diesel migration run
+DATABASE_URL=postgres://postgres:postgres@localhost/ambi_rs_dev diesel migration run
 ```
 
 ### Set Up Git Hooks
 
 The Ambi repository makes use of several Git hooks to ensure that code quality standards are met and consistent. To automatically configure these hooks for your local workspace, you can run the following:
 
+``` sh
 ./scripts/create-git-hooks
+```
+
 This will create symlinks to the Git hooks, preserving any hooks that you may have already configured.
 
 ## Running
