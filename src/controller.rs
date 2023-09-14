@@ -34,7 +34,7 @@ pub(crate) async fn events(
                             yield Event::data(format!("{}°C", reading.temperature)).event("temperature");
                             yield Event::data(format!("{}%", reading.humidity)).event("humidity");
                             yield Event::data(format!("{} mbars", reading.pressure)).event("pressure");
-                            yield Event::data(format!("{}", reading.air_purity)).event("air_purity");
+                            yield Event::data(reading.air_purity.to_string()).event("air_purity");
                             yield Event::data(format!("{} pcs/ltr", reading.dust_concentration)).event("dust_concentration");
                         }
                         Err(e) => { error!("Err: failed to retrieve latest reading: {:?}", e) }
