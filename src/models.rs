@@ -15,7 +15,7 @@ pub struct Reading {
 
 #[derive(Debug, Insertable, Deserialize)]
 #[serde(crate = "rocket::serde")]
-#[table_name = "readings"]
+#[diesel(table_name = readings)]
 pub struct NewReading {
     pub temperature: f64,
     pub humidity: f64,
