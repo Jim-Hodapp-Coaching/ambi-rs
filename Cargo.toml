@@ -7,7 +7,7 @@ edition = "2021"
 rocket = { version = "0.5.0-rc.2", features = ["json"] }
 serde = "1.0.147"
 diesel = { version = "2.1.1", features = ["postgres"] }
-env_logger = "0.10.0"
+env_logger = "0.11.1"
 log = "0.4.17"
 
 [dependencies.rocket_sync_db_pools]
